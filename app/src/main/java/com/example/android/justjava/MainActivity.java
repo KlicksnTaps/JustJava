@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
        String naira= "\u20A6";
         int price = quantity * 5;
         displayPrice(price);
+        /**
+         * the pricemessage variable immeadiatly under will disply the amout with a $ the second variable displays the
+         * price with a N naira sign
+         */
 //        String pricemessage = "The Total price of your service is:" + NumberFormat.getCurrencyInstance().format(price) + "\n Thankyou very much and \nplease come again soon!";
         String pricemessage = "The Total price of your service is:"+ naira+ price + "\n Thankyou very much and \nplease come again soon!";
         displayMessage(pricemessage);
