@@ -56,11 +56,14 @@ public class MainActivity extends AppCompatActivity {
      * nairasymbol for the Nigerian Naira
      */
 
-    public void submitOrder(View view) {
+    public void submitOrder(View view)
+    {
+
+
         // price = quantity * 5;
 
         EditText nameText = (EditText) findViewById(R.id.name_text);
-        String named = nameText.getText().toString();
+        CharSequence named = nameText.getText();
 
         CheckBox creamCheckBox = (CheckBox) findViewById(R.id.whpCream_chbox);
         boolean cchekker = creamCheckBox.isChecked();
@@ -70,9 +73,10 @@ public class MainActivity extends AppCompatActivity {
         boolean cheker = chockBox.isChecked();
 
         Log.v(DEBUG_PARAM, "just before they go");
-        displayPrice(named, cchekker, cheker, quantity);
-    }
+        int price = displayPrice( cchekker, cheker);
+        orderSummary(nameText.toString(),cchekker,cheker,price);
 
+        }
 
 //        String pricemessage = "The Total price of your service is:" + naira + price + "\n Thankyou very much and \nplease come again soon!";
 //        displayMessage(pricemessage);
@@ -119,47 +123,68 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method displays the value of the given price on the screen.
      * This method is not used
+     * @param chk is used to collect the value of whether the clients wants cream
+     * @param chkr is used to indicate if the client ordered chocolate
      */
 
 
-    private void displayPrice(String name, boolean chk, boolean chkr, int number) {
-        name = "Hello :" + nameText.getText().toString() + "\n you ordered the following";
-        chk = creamCheckBox.isChecked();
-        if (creamCheckBox.isChecked() == true) {
-            price = price + 30;
-            name += "\n GradeOne African Cream" + naira + 30;
+   private int displayPrice( boolean chk, boolean chkr) {
+    int toppings=0;
+       chk = creamCheckBox.isChecked();
 
+        if (creamCheckBox.isChecked() == true) {
+           toppings= toppings+30;
             Log.v(DEBUG_PARAM, "creame added");
         }
         chkr = chockBox.isChecked();
+
         if (chockBox.isChecked() == true) {
-            price = price + 100;
-            name += "\nOriginal Nigerian Chocolate : " + naira + 40;
+            toppings=toppings+40;
             Log.v(DEBUG_PARAM, "chokolate added");
 
 
         }
-        price = price + 100;
-        name += "Highest blend of Ethiopian Coffee" + naira + 100;
-        price = price + 5;
-        price = price * number;
+
+       /**
+        *  this where the cost of topings are added to the cost of a N100 for a cafe cup
+        */
+
+       price = toppings+ 100;
+        price = price * quantity;
 
         Log.v(DEBUG_PARAM, "total calculated");
-        name += "The total cost is :" + naira + price;
+        return price;
 
-        TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
-        quantityTextView.setText(name);
+//        TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
+//        quantityTextView.setText(String.valueOf(name));
 
     }
 
 
     /**
+     *
+     * @param priceMessage variable holding name
      * This method displays a given message on the screen.
      */
 
-    private void displayMessage(String message) {
+    private String orderSummary(String priceMessage ,boolean chk,boolean chkr  ,int totalPrice) {
+chk=creamCheckBox.isChecked();
+chkr=chockBox.isChecked();
+        priceMessage = "Hello :" + nameText.getText().toString() + "\n you ordered the following";
+        priceMessage += "Highest blend of Ethiopian Coffee:" + naira + 100;
+        priceMessage += "\n GradeOne African Cream: " +chk+ naira + 30;
+        priceMessage += "\nOriginal Nigerian Chocolate : "+chkr + naira + 40;
+        totalPrice=price;
+        priceMessage+= "The total cost is :" + naira + totalPrice;
+
         TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
 
-        quantityTextView.setText(message);
+        quantityTextView.setText(priceMessage);
+
+
+return priceMessage;
+
+
+
     }
 }
