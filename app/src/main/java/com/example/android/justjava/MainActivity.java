@@ -27,9 +27,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
  */
 public class MainActivity extends AppCompatActivity {
     public final String DEBUG_PARAM = null;
-    EditText nameText;
-    CheckBox creamCheckBox;
-    CheckBox chockBox;
+
+
 
     String naira = "\u20A6";
     int quantity = 0;
@@ -44,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
     }
 
 
@@ -56,14 +58,16 @@ public class MainActivity extends AppCompatActivity {
      * nairasymbol for the Nigerian Naira
      */
 
-    public void submitOrder(View view)
-    {
+    public void submitOrder(View view) {
 
 
         // price = quantity * 5;
 
+
+
+
         EditText nameText = (EditText) findViewById(R.id.name_text);
-        CharSequence named = nameText.getText();
+        String named = nameText.getText().toString();
 
         CheckBox creamCheckBox = (CheckBox) findViewById(R.id.whpCream_chbox);
         boolean cchekker = creamCheckBox.isChecked();
@@ -72,11 +76,16 @@ public class MainActivity extends AppCompatActivity {
         CheckBox chockBox = (CheckBox) findViewById(R.id.chocolate_text);
         boolean cheker = chockBox.isChecked();
 
-        Log.v(DEBUG_PARAM, "just before they go");
-        int price = displayPrice( cchekker, cheker);
-        orderSummary(nameText.toString(),cchekker,cheker,price);
 
-        }
+
+
+
+
+        Log.v(DEBUG_PARAM, "just before they go");
+        int pricer = displayPrice(cchekker, cheker);
+        String out = orderSummary(named, cchekker, cheker, pricer);
+        finalDisplay(out);
+    }
 
 //        String pricemessage = "The Total price of your service is:" + naira + price + "\n Thankyou very much and \nplease come again soon!";
 //        displayMessage(pricemessage);
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void increment(View view) {
         if (quantity >= 100) {
-            Toast.makeText(this, "you cant have more than 100 coffes at a time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "you cant order more than a 100 coffees", Toast.LENGTH_SHORT).show();
             return;
         }
         quantity = quantity + 1;
@@ -104,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public void decrement(View view) {
         if (quantity <= 1) {
 
-            Toast.makeText(this, "you cant have less than one coffes at a time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "you cant have less than a coffee", Toast.LENGTH_SHORT).show();
             return;
         }
         quantity = quantity - 1;
@@ -123,37 +132,34 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method displays the value of the given price on the screen.
      * This method is not used
-     * @param chk is used to collect the value of whether the clients wants cream
+     *
+     * @param chk  is used to collect the value of whether the clients wants cream
      * @param chkr is used to indicate if the client ordered chocolate
      */
 
 
-   private int displayPrice( boolean chk, boolean chkr) {
-    int toppings=0;
-       chk = creamCheckBox.isChecked();
-
-        if (creamCheckBox.isChecked() == true) {
-           toppings= toppings+30;
+    private int displayPrice(boolean chk, boolean chkr)
+    {
+        int toppings = 0;
+        int cost;
+        if (chk)
+        {
+            toppings = toppings + 30;
             Log.v(DEBUG_PARAM, "creame added");
         }
-        chkr = chockBox.isChecked();
-
-        if (chockBox.isChecked() == true) {
-            toppings=toppings+40;
-            Log.v(DEBUG_PARAM, "chokolate added");
-
+        if (chkr)
+        {
+            toppings = toppings + 40;
+              Log.v(DEBUG_PARAM, "chokolate added");
 
         }
 
-       /**
-        *  this where the cost of topings are added to the cost of a N100 for a cafe cup
-        */
+//        this where the cost of topings are added to the cost of a N100 for a cafe cup
+        cost = toppings + 100;
+        cost = cost * quantity;
 
-       price = toppings+ 100;
-        price = price * quantity;
-
-        Log.v(DEBUG_PARAM, "total calculated");
-        return price;
+         Log.v(DEBUG_PARAM, "total calculated");
+        return cost;
 
 //        TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
 //        quantityTextView.setText(String.valueOf(name));
@@ -162,29 +168,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     *
-     * @param priceMessage variable holding name
-     * This method displays a given message on the screen.
+     * @parampriceMessage variable holding nameThis method displays a given message on the screen.
+     * @return priceMessage returns the total price of the oredered coffee with/without toppings
      */
 
-    private String orderSummary(String priceMessage ,boolean chk,boolean chkr  ,int totalPrice) {
-chk=creamCheckBox.isChecked();
-chkr=chockBox.isChecked();
-        priceMessage = "Hello :" + nameText.getText().toString() + "\n you ordered the following";
-        priceMessage += "Highest blend of Ethiopian Coffee:" + naira + 100;
-        priceMessage += "\n GradeOne African Cream: " +chk+ naira + 30;
-        priceMessage += "\nOriginal Nigerian Chocolate : "+chkr + naira + 40;
-        totalPrice=price;
-        priceMessage+= "The total cost is :" + naira + totalPrice;
+    private String orderSummary(String name, boolean chk, boolean chkr, int totalPrice) {
 
+       String priceMessage = "Hello :" + name + "\n you ordered the following";
+        priceMessage += "Highest blend of Ethiopian Coffee:" + "cost" + naira + "100";
+        priceMessage += "\n GradeOne African Cream: " + chk + "cost" + naira + "30";
+        priceMessage += "\nOriginal Nigerian Chocolate : " + chkr + "cost" + naira + "40";
+        totalPrice = displayPrice(chk, chkr);
+        priceMessage += "The total cost is :" + naira + totalPrice;
+        return priceMessage;
+
+
+    }
+
+
+    private void finalDisplay(String pMessage) {
         TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
 
-        quantityTextView.setText(priceMessage);
-
-
-return priceMessage;
-
-
+        quantityTextView.setText(pMessage);
 
     }
 }
