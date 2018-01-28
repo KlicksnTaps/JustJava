@@ -10,6 +10,8 @@
 package com.example.android.justjava;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     String naira = "\u20A6";
     int quantity = 0;
-    int price = 0;
+  //  int price = 0;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -70,20 +72,29 @@ public class MainActivity extends AppCompatActivity {
         String named = nameText.getText().toString();
 
         CheckBox creamCheckBox = (CheckBox) findViewById(R.id.whpCream_chbox);
-        boolean cchekker = creamCheckBox.isChecked();
+        boolean addcream = creamCheckBox.isChecked();
 
 
         CheckBox chockBox = (CheckBox) findViewById(R.id.chocolate_text);
-        boolean cheker = chockBox.isChecked();
-
-
-
-
+        boolean addsChoklate = chockBox.isChecked();
 
 
         Log.v(DEBUG_PARAM, "just before they go");
-        int pricer = displayPrice(cchekker, cheker);
-        String out = orderSummary(named, cchekker, cheker, pricer);
+        int pricer = displayPrice(addcream, addsChoklate);
+        String out = orderSummary(named,addcream, addsChoklate, pricer);
+
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setData( Uri.parse("mailto"));
+        intent.putExtra(intent.EXTRA_TITLE,"Hello"+named+"welcome to the Just Java Cafe");
+        intent.putExtra(intent.EXTRA_TEXT, out);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivity(intent);
+        Log.e(  DEBUG_PARAM,"OKAU")
+        }
+
+
         finalDisplay(out);
     }
 
@@ -176,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
 
        String priceMessage = "Hello :" + name + "\n you ordered the following";
         priceMessage += "Highest blend of Ethiopian Coffee:" + "cost" + naira + "100";
-        priceMessage += "\n GradeOne African Cream: " + chk + "cost" + naira + "30";
-        priceMessage += "\nOriginal Nigerian Chocolate : " + chkr + "cost" + naira + "40";
+        priceMessage += "\n GradeOne African Cream: " + chk + "  cost" + naira + "30";
+        priceMessage += "\nOriginal Nigerian Chocolate : " + chkr + "  cost" + naira + "40";
         totalPrice = displayPrice(chk, chkr);
         priceMessage += "The total cost is :" + naira + totalPrice;
         return priceMessage;
