@@ -28,13 +28,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
-    public final String DEBUG_PARAM = null;
-
+    public final String DEBUG_PARAM = "Debug";
 
 
     String naira = "\u20A6";
     int quantity = 0;
-  //  int price = 0;
+    //  int price = 0;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -66,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
         // price = quantity * 5;
 
 
-
-
         EditText nameText = (EditText) findViewById(R.id.name_text);
         String named = nameText.getText().toString();
 
@@ -81,17 +78,16 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v(DEBUG_PARAM, "just before they go");
         int pricer = displayPrice(addcream, addsChoklate);
-        String out = orderSummary(named,addcream, addsChoklate, pricer);
+        String out = orderSummary(named, addcream, addsChoklate, pricer);
 
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setData( Uri.parse("mailto"));
-        intent.putExtra(intent.EXTRA_TITLE,"Hello"+named+"welcome to the Just Java Cafe");
+        intent.setData(Uri.parse("mailto"));
+        intent.putExtra(intent.EXTRA_TITLE, "Hello" + named + "welcome to the Just Java Cafe");
         intent.putExtra(intent.EXTRA_TEXT, out);
-        if(intent.resolveActivity(getPackageManager())!=null)
-        {
+        if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
-        Log.e(  DEBUG_PARAM,"OKAU")
+            Log.e(DEBUG_PARAM, "OKAU");
         }
 
 
@@ -149,19 +145,16 @@ public class MainActivity extends AppCompatActivity {
      */
 
 
-    private int displayPrice(boolean chk, boolean chkr)
-    {
+    private int displayPrice(boolean chk, boolean chkr) {
         int toppings = 0;
         int cost;
-        if (chk)
-        {
+        if (chk) {
             toppings = toppings + 30;
             Log.v(DEBUG_PARAM, "creame added");
         }
-        if (chkr)
-        {
+        if (chkr) {
             toppings = toppings + 40;
-              Log.v(DEBUG_PARAM, "chokolate added");
+            Log.v(DEBUG_PARAM, "chokolate added");
 
         }
 
@@ -169,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         cost = toppings + 100;
         cost = cost * quantity;
 
-         Log.v(DEBUG_PARAM, "total calculated");
+        Log.v(DEBUG_PARAM, "total calculated");
         return cost;
 
 //        TextView quantityTextView = (TextView) findViewById(R.id.price_text_view);
@@ -179,18 +172,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * @parampriceMessage variable holding nameThis method displays a given message on the screen.
      * @return priceMessage returns the total price of the oredered coffee with/without toppings
+     * @parampriceMessage variable holding nameThis method displays a given message on the screen.
      */
 
     private String orderSummary(String name, boolean chk, boolean chkr, int totalPrice) {
 
-       String priceMessage = "Hello :" + name + "\n you ordered the following";
-        priceMessage += "Highest blend of Ethiopian Coffee:" + "cost" + naira + "100";
+        String priceMessage = "Hello :" + name + "\n you ordered the following";
+        priceMessage += "\nHighest blend of Ethiopian Coffee:" + "cost" + naira + "100";
         priceMessage += "\n GradeOne African Cream: " + chk + "  cost" + naira + "30";
         priceMessage += "\nOriginal Nigerian Chocolate : " + chkr + "  cost" + naira + "40";
         totalPrice = displayPrice(chk, chkr);
-        priceMessage += "The total cost is :" + naira + totalPrice;
+        priceMessage += "\nQuantity :" + quantity+" cups";
+        priceMessage += "\nThe total cost is :" + naira + totalPrice;
         return priceMessage;
 
 
